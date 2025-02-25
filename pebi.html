@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun, Sahabat!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background-color: #ff7bac;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            transition: all 0.8s ease;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .envelope.open {
+            transform: translateY(50vh);
+            opacity: 0;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            top: -50px;
+            background-color: #ff5c8d;
+            clip-path: polygon(0 50%, 50% 0, 100% 50%, 100% 100%, 0 100%);
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 11;
+        }
+        
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .card-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(100vh);
+            transition: transform 1.2s ease;
+            z-index: 5;
+        }
+        
+        .envelope.open + .card-wrapper {
+            transform: translateY(0);
+        }
+        
+        .card {
+            width: 300px;
+            height: 420px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 1s;
+            z-index: 6;
+        }
+        
+        .card:hover {
+            transform: perspective(1000px) rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #ffecef;
+        }
+        
+        .card-front {
+            background: linear-gradient(to bottom, #ff9eb5, #ff5c8d);
+            color: white;
+        }
+        
+        h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .message {
+            font-size: 16px;
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .cake {
+            margin: 15px 0;
+        }
+        
+        .candle {
+            width: 10px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ff0, #fa0);
+            position: relative;
+            margin: 0 auto 10px;
+            border-radius: 4px;
+        }
+        
+        .flame {
+            width: 15px;
+            height: 30px;
+            background: radial-gradient(#ff5722, #ff9800);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -25px;
+            left: -2.5px;
+            animation: flicker 0.8s infinite alternate;
+        }
+        
+        .cake-base {
+            width: 100px;
+            height: 60px;
+            background: #f06292;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .cake-middle {
+            width: 120px;
+            height: 30px;
+            background: #ec407a;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin: 0 auto;
+            top: 0;
+        }
+        
+        .cake-bottom {
+            width: 140px;
+            height: 30px;
+            background: #d81b60;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            margin: 0 auto;
+            top: 0;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f;
+            animation: fall 5s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes flicker {
+            0% {transform: scale(1);}
+            100% {transform: scale(1.1);}
+        }
+        
+        @keyframes fall {
+            0% {transform: translateY(-100vh) rotate(0deg);}
+            100% {transform: translateY(100vh) rotate(360deg);}
+        }
+        
+        .signature {
+            font-style: italic;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        .instruction {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .intro-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+            width: 100%;
+        }
+        
+        .intro-text.hide {
+            opacity: 0;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            background-color: #ff5c8d;
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        
+        .balloon:before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background-color: #ff5c8d;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        
+        .balloon:after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            background-color: rgba(0,0,0,0.3);
+            bottom: -50px;
+            left: 50%;
+        }
+        
+        @keyframes float {
+            0%, 100% {transform: translateY(0);}
+            50% {transform: translateY(-20px);}
+        }
+        
+        .start-button {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff5c8d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+        
+        .start-button:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        #main-content.show {
+            opacity: 1;
+        }
+        
+        /* Memory Gallery Styles */
+        .photo-gallery {
+            width: 100%;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .photo-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo {
+            min-width: 100%;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .prev {
+            left: 10px;
+        }
+        
+        .next {
+            right: 10px;
+        }
+        
+        .gallery-dot-container {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        
+        .gallery-dot.active {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <div class="intro-text">
+            Ada Kejutan Spesial Untukmu!
+        </div>
+        <button class="start-button" id="startButton">Buka Kejutan</button>
+    </div>
+    
+    <div id="main-content">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+        </div>
+        
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="card-front">
+                    <h1>Selamat Ulang Tahun!</h1>
+                    
+                    <!-- Gallery foto kenangan -->
+                    <div class="photo-gallery">
+                        <div class="photo-container" id="photoContainer">
+                            <!-- Foto-foto akan ditambahkan via JavaScript -->
+                        </div>
+                        <div class="gallery-nav prev" id="prevBtn">&lt;</div>
+                        <div class="gallery-nav next" id="nextBtn">&gt;</div>
+                        <div class="gallery-dot-container" id="dotContainer"></div>
+                    </div>
+                    
+                    <div class="cake">
+                        <div class="candle">
+                            <div class="flame"></div>
+                        </div>
+                        <div class="cake-base"></div>
+                        <div class="cake-middle"></div>
+                        <div class="cake-bottom"></div>
+                    </div>
+                    <p class="instruction">Arahkan kursor atau sentuh untuk membuka</p>
+                </div>
+                <div class="card-back">
+                    <h1>Sahabatku Tersayang</h1>
+                    <p class="message">
+                        Di hari spesialmu ini, aku ingin mengucapkan selamat ulang tahun!
+                        Semoga tahun ini membawa kebahagiaan, kesehatan, dan kesuksesan untukmu.
+                        Terima kasih telah menjadi sahabat terbaikku sepanjang tahun-tahun yang kita lewati bersama.
+                    </p>
+                    <div class="photo-gallery">
+                        <div class="photo-container" id="photoContainer2">
+                            <!-- Foto-foto akan ditambahkan via JavaScript (duplikat) -->
+                        </div>
+                        <div class="gallery-nav prev" id="prevBtn2">&lt;</div>
+                        <div class="gallery-nav next" id="nextBtn2">&gt;</div>
+                        <div class="gallery-dot-container" id="dotContainer2"></div>
+                    </div>
+                    <p class="signature">Dari: [Nama Kamu]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="birthdaySong" preload="auto">
+        <source src="https://cdnjs.cloudflare.com/ajax/libs/sound-effects/4.0.0/HappyBirthday.mp3" type="audio/mp3">
+        <!-- Fallback sumber audio -->
+        <source src="https://www.soundjay.com/misc/sounds/happy-birthday-music-box-1.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('startButton');
+            const intro = document.getElementById('intro');
+            const mainContent = document.getElementById('main-content');
+            const envelope = document.getElementById('envelope');
+            const birthdaySong = document.getElementById('birthdaySong');
+            
+            // Data foto kenangan (gunakan placeholder untuk demo)
+            // Ganti links ini dengan URL foto-foto Anda sendiri
+            const memories = [
+                {
+                    image: '/api/placeholder/400/300',
+                    caption: 'Liburan di Pantai'
+                },
+                {
+                    image: '/api/placeholder/400/300',
+                    caption: 'Ulang Tahun Tahun Lalu'
+                },
+                {
+                    image: '/api/placeholder/400/300',
+                    caption: 'Festival Musik Bersama'
+                },
+                {
+                    image: '/api/placeholder/400/300',
+                    caption: 'Wisuda Kita'
+                },
+                {
+                    image: '/api/placeholder/400/300',
+                    caption: 'Perjalanan ke Gunung'
+                }
+            ];
+            
+            // Inisialisasi galeri foto
+            initPhotoGallery('photoContainer', 'dotContainer', 'prevBtn', 'nextBtn');
+            initPhotoGallery('photoContainer2', 'dotContainer2', 'prevBtn2', 'nextBtn2');
+            
+            // Mulai dengan menambahkan balon-balon
+            createBalloons();
+            
+            // Tampilkan konfeti saat halaman dimuat
+            createConfetti();
+            
+            // Ketika tombol start ditekan
+            startButton.addEventListener('click', function() {
+                document.querySelector('.intro-text').classList.add('hide');
+                startButton.style.display = 'none';
+                
+                // Tampilkan konten utama
+                mainContent.classList.add('show');
+                
+                // Buat animasi untuk membuka amplop setelah beberapa detik
+                setTimeout(() => {
+                    envelope.classList.add('open');
+                    birthdaySong.play().catch(e => console.log('Auto-play terhalang oleh browser:', e));
+                }, 1000);
+            });
+            
+            // Menambahkan event listener untuk memastikan amplop dapat dibuka dengan klik
+            envelope.addEventListener('click', function() {
+                envelope.classList.add('open');
+                birthdaySong.play().catch(e => console.log('Auto-play terhalang oleh browser:', e));
+            });
+            
+            // Fungsi untuk inisialisasi galeri foto
+            function initPhotoGallery(containerId, dotContainerId, prevBtnId, nextBtnId) {
+                const container = document.getElementById(containerId);
+                const dotContainer = document.getElementById(dotContainerId);
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
+                
+                let currentIndex = 0;
+                
+                // Tambahkan foto-foto ke container
+                memories.forEach((memory, index) => {
+                    // Buat elemen foto
+                    const photoDiv = document.createElement('div');
+                    photoDiv.className = 'photo';
+                    photoDiv.style.backgroundImage = `url('${memory.image}')`;
+                    
+                    // Tambahkan caption
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    caption.textContent = memory.caption;
+                    photoDiv.appendChild(caption);
+                    
+                    // Tambahkan ke container
+                    container.appendChild(photoDiv);
+                    
+                    // Tambahkan dot untuk navigasi
+                    const dot = document.createElement('div');
+                    dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
+                    dot.addEventListener('click', () => {
+                        goToSlide(index);
+                    });
+                    dotContainer.appendChild(dot);
+                });
+                
+                // Fungsi untuk pindah ke slide tertentu
+                function goToSlide(index) {
+                    currentIndex = index;
+                    container.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    
+                    // Update active dot
+                    document.querySelectorAll(`#${dotContainerId} .gallery-dot`).forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                }
+                
+                // Event listeners untuk navigasi
+                prevBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex > 0) ? currentIndex - 1 : memories.length - 1;
+                    goToSlide(currentIndex);
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex < memories.length - 1) ? currentIndex + 1 : 0;
+                    goToSlide(currentIndex);
+                });
+                
+                // Auto slideshow
+                setInterval(() => {
+                    currentIndex = (currentIndex < memories.length - 1) ? currentIndex + 1 : 0;
+                    goToSlide(currentIndex);
+                }, 5000);
+            }
+        });
+        
+        // Menambahkan balon-balon
+        function createBalloons() {
+            const colors = ['#ff7bac', '#90caf9', '#a5d6a7', '#ffab91', '#e1bee7', '#fff59d'];
+            for (let i = 0; i < 10; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * 90 + 5 + 'vw';
+                balloon.style.top = Math.random() * 40 + 5 + 'vh';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.width = Math.random() * 20 + 30 + 'px';
+                balloon.style.height = Math.random() * 30 + 40 + 'px';
+                balloon.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(balloon);
+            }
+        }
+        
+        // Menambahkan konfeti
+        function createConfetti() {
+            const colors = ['#ff0', '#f0f', '#0ff', '#0f0', '#f00', '#00f'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.opacity = Math.random();
+                document.body.appendChild(confetti);
+            }
+        }
+    </script>
+</body>
+</html>
